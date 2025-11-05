@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>The Agency</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="icon" href="./images/favicon.png" type="image/x-icon">
+  </head>
+  <body>
+    <main>
+      <div class="position topRight" onclick="startGame()"></div>
+      <div class="position topLeft" onclick="startGame()"></div>
+      <div class="position bottomRight" onclick="startGame()"></div>
+      <div class="position bottomLeft" onclick="startGame()"></div>
+      <div class="position nametag" id="nametag">
+            <img src="./images/nametag.webp" class="position" height='100%' draggable='false'>
+            <input type="text" class="nameInput position" placeholder="Name" id="playerName">
+            <input type="number" class="escapeInput position" placeholder="# Escaped" id="escapeCount">
+            <button class="submitInput position" onclick="acceptName()">SUBMIT</button>
+      </div>
+      <div class="position phone" id="phone" onclick="testSound()">
+            <img src="./images/phone.webp" class="position" height='100%' draggable='false'>
+      </div>
+      <div class="position notepad" id="notepad">
+            <img src="./images/notepad.webp" class="notepadIMG position" height='100%' draggable='false'>
+            <span class="noteText position">
+                  Agency Equipment: <br>
+                  Pen and Paper <br>
+                  Calculator <br>
+            </span>
+            <input
+            type="file"
+            id="fileElem"
+            accept="txt/*"
+            style="display:none" />
+            <button class="fileSelect position" id="fileSelect" type="button">Load</button>
+      </div>
+      <div class="instructions instructBack position">
+            <div class="instructions textHolder position">
+                  <span class="instructLargeText"> How to Play: <br></span>
+                  <span class="instructText">
+                        The Inventory is located at the top of the screen. Hover over it for access. <br>
+                        The pause button is also located there. <br>
+                        NEVER click the Browser's back arrow! <br>
+                        Clicking on the bottom of the screen will take you back instead. <br>
+                        (The cursor will become feet) <br>
+                        Right click to Rotate! This might be in 2D or 3D space. <br><br><br>
+                  </span>
+                  <img src="./images/arrow.webp" class="arrowLeft position" height='100%' draggable='false'>
+                  <img src="./images/cow.webp" class="cow position" height='100%' draggable='false'>
+                  <img src="./images/arrow.webp" class="arrowRight position" height='100%' draggable='false'>
+                  <!-- <div class="instructions cubeHolder position">
+                        <div class="instructions face" id="faceOne"></div>
+                        <div class="instructions face" id="faceTwo"></div>
+                        <div class="instructions face" id="faceThree"></div>
+                        <div class="instructions face" id="faceFour"></div>
+                        <div class="instructions face" id="faceFive"></div>
+                        <div class="instructions face" id="faceSix"></div>
+                  </div> -->
+                  <div class="instructions cubeHolderBig position">
+                        <div class="instructions face" id="faceOneBig"></div>
+                        <div class="instructions face" id="faceTwoBig"></div>
+                        <div class="instructions face" id="faceThreeBig"></div>
+                        <div class="instructions face" id="faceFourBig"></div>
+                        <div class="instructions face" id="faceFiveBig"></div>
+                        <div class="instructions face" id="faceSixBig"></div>
+                  </div>
+                  <span class="instructText"> 
+                        You can ask for a hint at any time if you feel stuck. <br>
+                        When you are ready, Click the bottom of the screen. <br> 
+                        (feet) 
+                  </span>
+            </div>
+      </div>
+      <div class="letter position" id="letter" onclick="dismissMe(this)">
+            <img src="./images/letter.webp" class="letterIMG position" height='100%' draggable='false'>
+            <div class="letterTextHolder position">
+                  <span class="letterTextLarge"> Welcome to The Agency! <br><br></span>
+                  <span class="letterText">
+                        We're looking forward to working with you. Your first assignment is as follows: <br><br>
+      
+                        You have been hired by our Temp Agency and assigned to an eccentric archeologist and scholar looking for new assistants. However, as they recently lost their only colleague, you are being sent to their home office unaccompanied to tend to their research while they are out on an excavation overseas. Due to the sensitive nature of their work, they have made it clear that they would not normally allow others to see their research until they had gained their full trust. In these extenuating circumstances, you will have to earn it as you go. <br> <br> <br>
+
+                        Good luck on your first assignment!
+      
+                  </span>
+            </div>
+      </div>
+      <div class='hidden inventory position' onmouseover="pullDownInv(this)" onmouseout="pullUpInv(this)">
+            <div class="instructions pause position"></div>
+      </div>
+      <div class='hidden leave' style="position:absolute; height:100px; width:100%; bottom:0px; left: 0px; z-index: 5; cursor: url('/cursors/steps.webp'), pointer;" onclick="actuallyStart()"></div>
+    </main>
+	<script src="script.js"></script>
+  </body>
+</html>
