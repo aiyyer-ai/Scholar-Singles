@@ -1,5 +1,7 @@
 var currentCombination = [0, 0, 0, 0];
 var correctCombination = [7, 0, 5, 2];
+var scale = 0;
+var leftOffset = 0; 
 
 var timeStart;
 window.onload = (event) => {
@@ -23,6 +25,22 @@ window.onload = (event) => {
       for (item in inventory) {
             enterInventoryEntry(item, inventory[item]);
       }
+
+      setScreen();
+      window.addEventListener("resize", setScreen);
+}
+
+function setScreen() {
+      let screenKeeper = document.getElementById("screenKeeper");
+      if(window.innerHeight / window.innerWidth > 9 / 16) {
+            screenKeeper.style.scale = `${(window.innerWidth - 96) / screenKeeper.clientWidth}`;
+            screenKeeper.style.left = 96 / 2 + "px";
+      } else {
+            screenKeeper.style.scale = `${window.innerHeight / screenKeeper.clientHeight}`;
+            screenKeeper.style.left = `${(window.innerWidth - screenKeeper.clientWidth * (window.innerHeight / screenKeeper.clientHeight)) / 2}px`;
+      }
+      scale = screenKeeper.style.scale;
+      leftOffset = screenKeeper.style.left.replace('px', '');
 }
 
 function checkPegs() {
@@ -233,7 +251,7 @@ function enterInventoryEntry(item, itemValue) {
                               imgDiv.style.height = pegs.clientWidth * 0.70 + "px";
                               imgDiv.style.left = 100 - 40 * imgNum + "px";
                               //imgDiv.style.top = -27 + 20 * imgNum + "px";
-                              imgDiv.style.top = `calc(1vh - 44px + ${20 * imgNum}px)`;
+                              imgDiv.style.top = `calc(11px - 44px + ${20 * imgNum}px)`;
                               changeItemVisibility(item, itemValue);
                               appendFixer++;
                               if (appendFixer == 4) {
@@ -358,42 +376,43 @@ function directSpotlight(button, painting, event) {
             let gameArea = document.getElementById(`gameArea`);
             gameArea.appendChild(spotlight);
       }
+      let spotlightBounds = spotlight.getBoundingClientRect();
       let spotLocations = [
             [
-                  paintingBounds.top + spotlight.clientHeight / 1.75,
+                  paintingBounds.top + spotlightBounds.height / 1.75,
                   paintingBounds.left + paintingBounds.width / 2
             ],
             [
-                  paintingBounds.top + spotlight.clientHeight * 1.5,
-                  paintingBounds.right - spotlight.clientWidth / 1.5
+                  paintingBounds.top + spotlightBounds.height * 1.5,
+                  paintingBounds.right - spotlightBounds.width / 1.5
             ],
             [
                   paintingBounds.top + paintingBounds.height / 2,
-                  paintingBounds.right - spotlight.clientWidth / 1.5
+                  paintingBounds.right - spotlightBounds.width / 1.5
             ],
             [
-                  paintingBounds.bottom - spotlight.clientHeight * 1.5,
-                  paintingBounds.right - spotlight.clientWidth / 1.5
+                  paintingBounds.bottom - spotlightBounds.height * 1.5,
+                  paintingBounds.right - spotlightBounds.width / 1.5
             ],
             [
-                  paintingBounds.bottom - spotlight.clientHeight / 1.75,
+                  paintingBounds.bottom - spotlightBounds.height / 1.75,
                   paintingBounds.left + paintingBounds.width / 2
             ],
             [
-                  paintingBounds.bottom - spotlight.clientHeight * 1.5,
-                  paintingBounds.left + spotlight.clientWidth / 1.5
+                  paintingBounds.bottom - spotlightBounds.height * 1.5,
+                  paintingBounds.left + spotlightBounds.width / 1.5
             ],
             [
                   paintingBounds.top + paintingBounds.height / 2,
-                  paintingBounds.left + spotlight.clientWidth / 1.5
+                  paintingBounds.left + spotlightBounds.width / 1.5
             ],
             [
-                  paintingBounds.top + spotlight.clientHeight * 1.5,
-                  paintingBounds.left + spotlight.clientWidth / 1.5
+                  paintingBounds.top + spotlightBounds.height * 1.5,
+                  paintingBounds.left + spotlightBounds.width / 1.5
             ]
       ];
-      spotlight.style.top = spotLocations[pegTurn][0] - spotlight.clientHeight / 2 + "px";
-      spotlight.style.left = spotLocations[pegTurn][1] - spotlight.clientWidth / 2 + "px";
+      spotlight.style.top = (spotLocations[pegTurn][0] - spotlightBounds.height / 2) / scale + "px";
+      spotlight.style.left = ((spotLocations[pegTurn][1] - spotlightBounds.width / 2) - leftOffset) / scale + "px";
       currentCombination[(painting.id.replace("painting", "").charCodeAt(0) - 65)] = pegTurn;
       let takenFedora = JSON.parse(window.sessionStorage.getItem(`wallLightsDone`));
       if (arraysEqual(currentCombination, correctCombination) && !takenFedora) {
@@ -415,6 +434,8 @@ function onPin(peg, circle) {
       peg.classList.remove(`dragItem`);
       peg.style.top = `0px`;
       peg.style.left = `0px`;
+      peg.style.height = peg.style.height.replace("px", "") / scale + "px";
+      peg.style.width = peg.style.width.replace("px", "") / scale + "px";
       peg.style.top = (circle.clientHeight / 1.25) - peg.clientHeight + "px";
       peg.style.left = (circle.clientWidth - peg.clientWidth) / 2 - 1 + "px";
       peg.onmousedown = false;
@@ -488,7 +509,7 @@ function dragElement(elmnt) {
             if (this.id == `pegs`) {
                   let nextPeg = Array.from(this.children).filter((peg) => { return !peg.onPage && !(peg.style.display == `none`) })[Array.from(this.children).filter((peg) => { return !peg.onPage && !(peg.style.display == `none`) }).length - 1];
                   placedItem = nextPeg.cloneNode(true);
-                  placedItem.style.height = 100 + "px";
+                  placedItem.style.height = 100 * scale + "px";
                   placedItem.style.width = placedItem.style.height.replace("px", "") * nextPeg.children[0].naturalWidth / nextPeg.children[0].naturalHeight + "px";
                   nextPeg.style.opacity = `50%`;
                   nextPeg.onPage = true;
@@ -538,6 +559,7 @@ function dragElement(elmnt) {
       function closeDragElement() {
             document.onmouseup = null;
             document.onmousemove = null;
+            console.log(elmnt);
             let overlap = overlayCheck(elmnt, "button");
             if (overlap[0] && elmnt.id.includes(`peg`)) {
                   onPin(elmnt, overlap[0]);

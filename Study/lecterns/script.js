@@ -81,24 +81,23 @@ window.onload = (event) => {
       });
       //in case I want to make something run at launch
       document.onclick = movementCheck;
-      let inventory = window.sessionStorage.getItem(`inventory`);
-      if (!inventory) {
-            inventory = {
-                  scholarDiary: false,
-                  faxPaper: false,
-                  faxSlip: false,
-            };
-            window.sessionStorage.setItem(`inventory`, JSON.stringify(inventory));
-      } else {
-            inventory = JSON.parse(inventory);
-      }
-      for (item in inventory) {
-            enterInventoryEntry(item, inventory[item]);
-      }
-      if(inventory.scholarDiary) {
-            backWithDiary = true;
-      }
       setSeed(`LECTERNS`);
+
+      setScreen();
+      window.addEventListener("resize", setScreen);
+}
+
+function setScreen() {
+      let screenKeeper = document.getElementById("screenKeeper");
+      if(window.innerHeight / window.innerWidth > 9 / 16) {
+            screenKeeper.style.scale = `${(window.innerWidth - 96) / screenKeeper.clientWidth}`;
+            screenKeeper.style.left = 96 / 2 + "px";
+      } else {
+            screenKeeper.style.scale = `${window.innerHeight / screenKeeper.clientHeight}`;
+            screenKeeper.style.left = `${(window.innerWidth - screenKeeper.clientWidth * (window.innerHeight / screenKeeper.clientHeight)) / 2}px`;
+      }
+      scale = screenKeeper.style.scale;
+      leftOffset = screenKeeper.style.left.replace('px', '');
 }
 
 function generateLecterns() {
