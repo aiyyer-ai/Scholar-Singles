@@ -1,9 +1,31 @@
 html {
 	background-color: whitesmoke;
-	background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url("./allbooks/bg.webp");
-	background-size: 100vw 85vh;
+	/* background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url("./allbooks/bg.webp");
+	background-size: 100vw 90vh; */
 	font-family: Palatino,Palatino Linotype,Palatino LT STD,Book Antiqua,Georgia,serif; 
 	color: whitesmoke;
+}
+
+body {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      margin: 0;
+      background-repeat: repeat-y;
+      background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url("./allbooks/bg.webp");
+}
+
+.screenKeeper {
+      top: 0px;
+      left: 0px;
+      width: 1920px;
+      height: 1080px;
+      transform-origin: 0% 0%;
+      /* background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url("./allbooks/bg.webp");
+      background-size: 100% 90%; */
 }
 
 * {
@@ -20,89 +42,18 @@ html {
 }
 
 .inventory {
-	height: 15vh;
-	width: 100%;
-	top: -10vh;
-	left: 0;
-	display: flex;
-	justify-content: center;
-	gap: 5vw;
-	z-index: 10;
-	background-color: transparent;
+      height: 162px;
+      width: 100%;
+      top: -108px;
+      left: 0;
+      display: flex;
+      justify-content: center;
+      gap: 96px;
+      z-index: 10;
+      background-color: transparent;
       background-image: url(/images/inventoryBackground.webp);
       background-size: 100% 100%;
-	opacity: 50%;
-}
-
-
-.pause {
-      height: 70px;
-      width: 70px;
-      border-radius: 50%;
-	background-color: transparent;
-      background-image: url(/images/pause.webp);
-      background-size: 100% 100%;
-      top: calc(50% - 35px);
-      right: calc(7.5vh - 35px);
-      display: flex;
-      justify-content: center;
-      align-content: center;
-      font-size: 40px;
-      color: black;
-}
-
-
-.unpauseButt {
-      bottom: 30%;
-}
-
-.saveButton {
-      top: 30px;
-      right: 50px;
-      font-size: 40px !important;
-}
-
-.unpauseButton {
-      border: none;
-      background-color: transparent;
-      font-size: 60px;
-      color: rgb(255, 255, 255, 0.8);
-      font-family: 'Passion One';
-}
-
-.unpauseButton:hover {
-      color: rgb(255, 255, 255, 0.5);
-}
-
-.unpauseButton:active {
-      color: rgb(255, 255, 255, 0.2);
-}
-
-.pauseOverlay {
-      height: 100vh;
-      width: 100vw;
-      top: 0;
-      left: 0;
-      pointer-events: all;
-      z-index: 100;
-      background-color: rgba(0, 0, 0, 0.2);
-      box-shadow: inset 0px 0px 500px 100px black;
-      backdrop-filter: blur(20px);
-      display: none;
-}
-
-.unpause {
-      font-family: 'Passion One';
-      font-size: 160px;
-      color: rgb(255, 255, 255, 0.8);
-      width: 1000px;
-      height: 400px;
-      top: calc(50% - 200px);
-      left: calc(50% - 500px);
-      z-index: 101;
-      display: flex;
-      justify-content: center;
-      align-content: center;
+      opacity: 50%;
 }
 
 @font-face {
@@ -115,11 +66,11 @@ html {
 }
 
 .inventoryItem {
-	height: 80%;
-	display: flex;
-	justify-content: center;
-	margin-top: 1vh;
-	margin-bottom: auto;
+      height: 80%;
+      display: flex;
+      justify-content: center;
+      margin-top: 11px;
+      margin-bottom: auto;
       filter: drop-shadow(-1px 1px 1px rgba(50, 50, 0, 0.5));
 }
 
@@ -293,7 +244,7 @@ html {
 }
 
 .lower {
-	height: 5vh;
+	height: 54px;
 	width: 100%;
 }
 
