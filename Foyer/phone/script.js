@@ -9,6 +9,8 @@ var faxSounds = new Audio('./audio/faxSounds.wav');
 var scholarCall = new Audio('./audio/scholarCallNew.wav');
 var allAudios = [security, question1, question2, question3, granted];
 var buttonAudios = {};
+var scale;
+var leftOffset;
 const STR_TO_NUM = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, zero: 0, star: "*", pound: "#", reciever: "!" };
 for (var i = 0; i < Object.keys(STR_TO_NUM).length; i++) {
       let keyKeys = Object.keys(STR_TO_NUM);
@@ -27,15 +29,10 @@ window.onload = (event) => {
       });
 
       //in case I want to make something run at launch
-      document.onclick = movementCheck;
       let inventory = window.sessionStorage.getItem(`inventory`);
       if (!inventory) {
             inventory = {
-                  gradCap: false,
-                  flatCap: false,
-                  fedora: false,
-                  visor: false,
-                  pegs: 0,
+                  faxSlip: true,
             };
             window.sessionStorage.setItem(`inventory`, JSON.stringify(inventory));
       } else {
@@ -44,101 +41,27 @@ window.onload = (event) => {
       for (item in inventory) {
             enterInventoryEntry(item, inventory[item]);
       }
-      let scholarCallVoicemail = JSON.parse(window.sessionStorage.getItem(`scholarCallVoicemail`));
-      if(scholarCallVoicemail) {
-            voicemailaudio = scholarCall;
-            voicemailaudio.isScholar = true;
-      }
+      // let scholarCallVoicemail = JSON.parse(window.sessionStorage.getItem(`scholarCallVoicemail`));
+      // if(scholarCallVoicemail) {
+      //       voicemailaudio = scholarCall;
+      //       voicemailaudio.isScholar = true;
+      // }
+
+      setScreen();
+      window.addEventListener("resize", setScreen);
 }
 
-var pauseTimeStart;
-
-function save() {
-      let jsonData = {...window.sessionStorage};
-      jsonData.lastRoom = `${window.location.pathname}`;
-      function download(content, fileName, contentType) {
-            var a = document.createElement("a");
-            var file = new Blob([content], {type: contentType});
-            a.href = URL.createObjectURL(file);
-            a.download = fileName;
-            a.click();
+function setScreen() {
+      let screenKeeper = document.getElementById("screenKeeper");
+      if(window.innerHeight / window.innerWidth > 9 / 16) {
+            screenKeeper.style.scale = `${(window.innerWidth - 96) / screenKeeper.clientWidth}`;
+            screenKeeper.style.left = 96 / 2 + "px";
+      } else {
+            screenKeeper.style.scale = `${window.innerHeight / screenKeeper.clientHeight}`;
+            screenKeeper.style.left = `${(window.innerWidth - screenKeeper.clientWidth * (window.innerHeight / screenKeeper.clientHeight)) / 2}px`;
       }
-      download(JSON.stringify(jsonData), 'ScholarSaveData.txt', 'text/plain');
-}
-
-
-function pause() {
-      setTimeSpent();
-      pauseTimeStart = Date.now();
-      let pauseOverlay = document.getElementById(`pauseOverlay`);
-      pauseOverlay.style.display = `block`;
-}
-
-function unpause() {
-      timeStart = Date.now();
-      let pauseOverlay = document.getElementById(`pauseOverlay`);
-      pauseOverlay.style.display = `none`;
-      let pauseTimeEnd = Date.now();
-      let pauseTimeSpent = (pauseTimeEnd - pauseTimeStart) / 1000;
-      let timing_dict = JSON.parse(window.sessionStorage.getItem(`timeData`));
-      if(!timing_dict) {
-            timing_dict = {};
-      }
-
-      let url_parts = window.location.pathname.split("/");
-      url_parts.shift();
-      url_parts.pop();
-
-      let timing_dict_level = timing_dict;
-      for (url_part of url_parts) {
-            if (!(url_part in timing_dict_level)) {
-                  timing_dict_level[url_part] = {};
-            }
-            timing_dict_level = timing_dict_level[url_part];
-      }
-      if(!timing_dict_level["time_spent_paused"]) {
-            timing_dict_level["time_spent_paused"] = 0;
-      }
-      timing_dict_level["time_spent_paused"] += Math.round(pauseTimeSpent);
-
-      window.sessionStorage.setItem(`timeData`, JSON.stringify(timing_dict));
-}
-
-function setTimeSpent() {
-      let timeEnd = Date.now();
-      let timeSpent = (timeEnd - timeStart) / 1000;
-      let timing_dict = JSON.parse(window.sessionStorage.getItem(`timeData`));
-      if(!timing_dict) {
-            timing_dict = {};
-      }
-
-      let url_parts = window.location.pathname.split("/");
-      url_parts.shift();
-      url_parts.pop();
-
-      let timing_dict_level = timing_dict;
-      for (url_part of url_parts) {
-            if (!(url_part in timing_dict_level)) {
-                  timing_dict_level[url_part] = {};
-            }
-            timing_dict_level = timing_dict_level[url_part];
-      }
-      if(!timing_dict_level["time_spent"]) {
-            timing_dict_level["time_spent"] = 0;
-      }
-      timing_dict_level["time_spent"] += Math.round(timeSpent);
-
-      window.sessionStorage.setItem(`timeData`, JSON.stringify(timing_dict));
-}
-
-function movementCheck(event) {
-      let clickLocation = Object.create(locationObject);
-      clickLocation.x = event.clientX;
-      clickLocation.y = event.clientY;
-      if (Array.from(event.target.classList).includes(`leave`)) {
-            setTimeSpent();
-            window.location.href = `../index.html`;
-      }
+      scale = screenKeeper.style.scale;
+      leftOffset = screenKeeper.style.left.replace('px', '');
 }
 
 function pullDownInv(inventoryDiv) {
@@ -443,15 +366,15 @@ function dragElement(elmnt) {
 function sendFaxSlip(faxSlip) {
       faxSlip.onmousedown = null;
       faxSlip.originalItem.style.display = `none`;
-      let inventory = JSON.parse(window.sessionStorage.getItem(`inventory`));
-      inventory[`faxSlip`] = false;
-      window.sessionStorage.setItem(`inventory`, JSON.stringify(inventory));
+      // let inventory = JSON.parse(window.sessionStorage.getItem(`inventory`));
+      // inventory[`faxSlip`] = false;
+      // window.sessionStorage.setItem(`inventory`, JSON.stringify(inventory));
       let hider = document.getElementById(`faxSlipHider`);
       let hiderBounds = hider.getBoundingClientRect();
       let slipBounds = faxSlip.getBoundingClientRect();
       hider.appendChild(faxSlip);
-      faxSlip.style.left = hiderBounds.width / 2 - slipBounds.width / 2 + 'px';
-      faxSlip.style.top = hiderBounds.height - slipBounds.height / 2 - slipBounds.width / 2 + 'px';
+      faxSlip.style.left = (hiderBounds.width / 2 - slipBounds.width / 2) * scale + 'px';
+      faxSlip.style.top = (hiderBounds.height - slipBounds.height / 2 - slipBounds.width / 2) * scale + slipBounds.width + 'px';
       faxSlip.style.transform = `rotate(90deg) rotateY(-30deg) translateZ(-1000px)`;
       setTimeout(() => {
             faxSlip.style.transition = `2s ease-in-out`;
@@ -687,7 +610,6 @@ function voicemailTranscript(audio, transcriptData, audioTime) {
       // }
       changeTranscription(transcriptText[transcriptTimes.indexOf(audioTime)]);
       let newAudioTime = transcriptTimes[transcriptTimes.indexOf(audioTime) + 1];
-      console.log(newAudioTime);
       if (newAudioTime) {
             audio.transcriptInterval = setTimeout(voicemailTranscript, newAudioTime - audioTime, audio, transcriptData, newAudioTime);
       }
