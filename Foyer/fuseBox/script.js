@@ -90,6 +90,21 @@ window.onload = function () {
             bookLight.classList.remove(`lightRed`);
             bookLight.classList.add(`lightYellow`);
       }
+      setScreen();
+      window.addEventListener("resize", setScreen);
+}
+
+function setScreen() {
+      let screenKeeper = document.getElementById("screenKeeper");
+      if(window.innerHeight / window.innerWidth > 9 / 16) {
+            screenKeeper.style.scale = `${(window.innerWidth - 96) / screenKeeper.clientWidth}`;
+            screenKeeper.style.left = 96 / 2 + "px";
+      } else {
+            screenKeeper.style.scale = `${window.innerHeight / screenKeeper.clientHeight}`;
+            screenKeeper.style.left = `${(window.innerWidth - screenKeeper.clientWidth * (window.innerHeight / screenKeeper.clientHeight)) / 2}px`;
+      }
+      scale = screenKeeper.style.scale;
+      leftOffset = screenKeeper.style.left.replace('px', '');
 }
 
 function pullDownInv(inventoryDiv) {
