@@ -17,6 +17,8 @@ var tray = document.getElementById(`tray`);
 var trayBounds = tray.getBoundingClientRect();
 var inertiaVector = { x: 0, y: 0, time: 0, rotation: 7.2 };
 var inertiaInterval;
+var scale;
+var leftOffset;
 
 var timeStart;
 window.onload = (event) => {
@@ -50,6 +52,21 @@ window.onload = (event) => {
       dragElement(die.parentElement);
       facing = document.getElementById(`1`);
       facing.style.boxShadow = `none`;
+      setScreen();
+      window.addEventListener("resize", setScreen);
+}
+
+function setScreen() {
+      let screenKeeper = document.getElementById("screenKeeper");
+      if(window.innerHeight / window.innerWidth > 9 / 16) {
+            screenKeeper.style.scale = `${(window.innerWidth - 96) / screenKeeper.clientWidth}`;
+            screenKeeper.style.left = 96 / 2 + "px";
+      } else {
+            screenKeeper.style.scale = `${window.innerHeight / screenKeeper.clientHeight}`;
+            screenKeeper.style.left = `${(window.innerWidth - screenKeeper.clientWidth * (window.innerHeight / screenKeeper.clientHeight)) / 2}px`;
+      }
+      scale = screenKeeper.style.scale;
+      leftOffset = screenKeeper.style.left.replace('px', '');
 }
 
 var pauseTimeStart;
