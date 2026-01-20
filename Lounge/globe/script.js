@@ -467,18 +467,18 @@ function dragElement(elmnt) {
             // set the element's new position:
             if (elmnt.id == `dieHolder`) {
                   if (elmnt.offsetTop >= trayBounds.top + 110 && elmnt.offsetTop <= trayBounds.bottom - 100 - elmnt.clientHeight) {
-                        elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+                        elmnt.style.top = (elmnt.offsetTop - pos2 / scale) + "px";
                   } else {
                         elmnt.style.top = closest(elmnt.offsetTop, [trayBounds.top + 110, trayBounds.bottom - 110 - elmnt.clientHeight]) + "px";
                   }
                   if (elmnt.offsetLeft >= trayBounds.left + 95 && elmnt.offsetLeft <= trayBounds.right - 120 - elmnt.clientWidth) {
-                        elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+                        elmnt.style.left = (elmnt.offsetLeft - pos1 / scale) + "px";
                   } else {
                         elmnt.style.left = closest(elmnt.offsetLeft, [trayBounds.left + 95, trayBounds.right - 130 - elmnt.clientWidth]) + "px";
                   }
             } else {
-                  elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
-                  elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+                  elmnt.style.top = (elmnt.offsetTop - pos2 / scale) + "px";
+                  elmnt.style.left = (elmnt.offsetLeft - pos1 / scale) + "px";
             }
       }
 
